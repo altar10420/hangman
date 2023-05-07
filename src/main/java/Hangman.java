@@ -8,6 +8,7 @@ public class Hangman {
     List<String> words = List.of("car", "machine", "playground", "garden");
     String word;
     char[] userWord;
+    int lives = 3;
 
     public void play() {
         Scanner scanner = new Scanner(System.in);
@@ -23,6 +24,7 @@ public class Hangman {
             System.out.println(userWord);
             System.out.println();
             System.out.println("Enter another letter: ");
+            System.out.println("Remaining lives: " + lives);
 
             char letter = scanner.nextLine().charAt(0);
             // TODO check if input correct
@@ -30,18 +32,33 @@ public class Hangman {
             checkLetter(letter);
         }
 
+        if (lives == 0) {
+            System.out.println("Sorry! You loose.");
+        } else {
+            System.out.println("The answer is: '" + word + "'");
+            System.out.println("Congratulations, you won!");
+        }
+
         scanner.close();
     }
 
     private void checkLetter(char letter) {
+        boolean foundLetter = false;
+
         for (int i = 0; i < word.length(); i++) {
             if (word.charAt(i) == letter) {
                 userWord[i] = letter;
+                foundLetter = true;
             }
+        }
+
+        if (!foundLetter) {
+            System.out.println("No matching letter found...Please try again :)");
+            lives--;
         }
     }
 
     private boolean gameEnded() {
-        return word.equals(String.valueOf(userWord));
+        return lives == 0 || word.equals(String.valueOf(userWord));
     }
 }
